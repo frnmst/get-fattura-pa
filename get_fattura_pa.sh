@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-#set -x
-
 . ./get_fattura_pa.conf
 
 check_dependencies()
