@@ -1,7 +1,7 @@
 # get_fattura_pa
 
 The purpose of this script is exclusively to read invoices received from the
-"Sistema di Interscambio".
+*Sistema di Interscambio*.
 
 ## Examples
 
