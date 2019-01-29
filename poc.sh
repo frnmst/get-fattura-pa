@@ -8,7 +8,7 @@ check_dependencies()
 {
     which \
         xmlstarlet \
-        awk \
+        gawk \
         sha256sum \
         curl \
         openssl \
@@ -30,7 +30,7 @@ check_hash()
         --template --match '//x:FileMetadati/Hash' \
         --value-of . "${metadata_file}")"
     local computed_hash="$(sha256sum --binary "${signed_file}" \
-        | awk '{print $1}')"
+        | gawk '{print $1}')"
 
     [ "${original_hash}" != "${computed_hash}" ] && return 1
 }
