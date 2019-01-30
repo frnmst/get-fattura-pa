@@ -25,14 +25,22 @@ The purpose of this script is exclusively to read invoices received from the
 
 Mandatory arguments to long options are mandatory for short options too.
 Options:
-    -c, --ignore-checksum
-    -f, --force-certificates-download
+    -c, --ignore-checksum                   avoid checksum comparision between
+                                            the metadata file and the signed
+                                            file
+    -f, --force-certificates-download       update the certificate list even if
+                                            a certificate file is already
+                                            present
     -h, --help                              print this help
-    -n, --no-extract-attachments
+    -n, --no-extract-attachments            avoid extracting possible
+                                            attachments if the original
+                                            file is an XML file
     --print-flags                           print the enabled options. This can also
                                             be used to print the default options
-    -q, --quiet
-    -s, --ignore-signature
+    -q, --quiet                             show errors and hide every other
+                                            output
+    -s, --ignore-signature                  avoid checking the cryptographic
+                                            signature of the file
 
 Exit status:
  0  if OK,
@@ -139,14 +147,15 @@ no-extract-attachments,print-flags,help,quiet,ignore-signature'
         && getopt_error && return 1
     [ "${print_flags}" = 'true' ] \
         && show_flags \
-            'flag_a' \
-            'flag_b' \
-            'flag_c' \
-            'flag_d' \
-            'flag_e' \
-            'flag_f' \
+           'ignore_checksum' \
+           'force_certificates_download' \
+           'no_extract_attachments' \
+           'quiet' \
+           'ignore_signature' \
         && return 0
     # Override values of optional parameters.
+
+    # TODO: implement the quiet option.
 
     # From now on you should call a function or an external program
     # using the values of the flag variables.
