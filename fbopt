@@ -46,8 +46,11 @@ Exit status:
  0  if OK,
  1  if an error occurred.
 
-<License header>
-<Copyright>
+This  is  free  software: you are free to change and redistribute it.  There
+is NO WARRANTY, to the extent  permitted by law.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+Copyright © 2018 Enio Carboni - Italy    (see https://github.com/eniocarboni/p7m)
+            2019 Franco Masotti (frnmst) <franco.masotti@live.com>
 EOF
 }
 
