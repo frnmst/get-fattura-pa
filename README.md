@@ -22,6 +22,10 @@ The purpose of this script is exclusively to read invoices received from the
 
 [](TOC)
 
+## Version
+
+0.0.1
+
 ## Definitions
 
 The following terms are used throughout this document and within the source 
