@@ -1,4 +1,4 @@
-# get_fattura_pa
+# get-fattura-pa
 
 The purpose of this script is exclusively to read invoices received from the
 *Sistema di Interscambio*.
@@ -7,7 +7,7 @@ The purpose of this script is exclusively to read invoices received from the
 
 [](TOC)
 
-- [get_fattura_pa](#get_fattura_pa)
+- [get-fattura-pa](#get-fattura-pa)
     - [Table of contents](#table-of-contents)
     - [Definitions](#definitions)
     - [Examples](#examples)
@@ -41,6 +41,7 @@ code.
 ## Help
 
 ```
+Usage: get_fattura_pa [OPTION] METADATA_FILE SIGNED_FILE
 The purpose of this script is exclusively to read invoices received from the
 *Sistema di Interscambio*
 
@@ -123,15 +124,15 @@ Copyright (c) 2018 Enio Carboni - Italy    (see https://github.com/eniocarboni/p
 
 Copyright (c) 2019 Franco Masotti (frnmst); franco [dot] masotti [at] live [dot] com
 
-get_fattura_pa is free software: you can redistribute it and/or modify
+get-fattura-pa is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-get_fattura_pa is distributed in the hope that it will be useful,
+get-fattura-pa is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with get_fattura_pa.  If not, see <https://www.gnu.org/licenses/>.
+along with get-fattura-pa.  If not, see <https://www.gnu.org/licenses/>.
