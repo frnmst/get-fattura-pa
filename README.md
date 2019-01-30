@@ -91,7 +91,7 @@ You need to install the following packages and the ones listed for
 
 Copyright (c) 2018 Enio Carboni - Italy    (see https://github.com/eniocarboni/p7m)
 
-Copyright (c) 2019 Franco Masotti (frnmst) <franco [dot] masotti [at] live [dot] com>
+Copyright (c) 2019 Franco Masotti (frnmst); franco [dot] masotti [at] live [dot] com
 
 get_fattura_pa is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
