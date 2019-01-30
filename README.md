@@ -3,9 +3,44 @@
 The purpose of this script is exclusively to read invoices received from the
 *Sistema di Interscambio*.
 
+## Table of contents
+
+[](TOC)
+
+- [get_fattura_pa](#get_fattura_pa)
+    - [Table of contents](#table-of-contents)
+    - [Definitions](#definitions)
+    - [Help](#help)
+    - [Examples](#examples)
+    - [Dependencies](#dependencies)
+    - [Pipeline](#pipeline)
+    - [Resources](#resources)
+        - [Original script](#original-script)
+        - [Fattura PA](#fattura-pa)
+        - [PKCS # 7](#pkcs--7)
+    - [License](#license)
+
+[](TOC)
+
+## Definitions
+
+The following terms are used throughout this document and within the source 
+code.
+
+| Term | Meaning |
+|------|---------|
+| signed file | the invoice file signed with a PKKCS # 7 public key |
+| metadata file | a file that contains the checksum of the signed file as well as other information |
+| original file | the invoice file without the signature |
+| attachments | user certain conditions, the files encoded as base64 binaries in the original file |
+
+## Help
+
+TODO
+
 ## Examples
 
-    $ ./get_fattura_pa document.xml.p7m
+    $ ./get_fattura_pa document.xml document.xml.p7m
 
     TODO
 
@@ -22,25 +57,12 @@ You need to install the following packages and the ones listed for
 | [curl](https://curl.haxx.se) | `/bin/curl` | `$ curl --version` | `curl 7.63.0 (x86_64-pc-linux-gnu) libcurl/7.63.0 OpenSSL/1.1.1a zlib/1.2.11 libidn2/2.1.0 libpsl/0.20.2 (+libidn2/2.1.0) libssh2/1.8.0 nghttp2/1.35.1 Release-Date: 2018-12-12` |
 | [OpenSSL](https://www.openssl.org) | `/bin/openssl` | `$ openssl version` | `OpenSSL 1.1.1a  20 Nov 2018` |
 
-## Help
-
-TODO
-
-## Definitions
-
-| Term | Meaning |
-|------|---------|
-| signed file | the invoice file signed with a PKKCS # 7 public key |
-| metadata file | a file that contains the checksum of the signed file as well as other information |
-| original file | the invoice file without the signature |
-| attachments | user certain conditions, the files encoded as base64 binaries in the original file |
-
 ## Pipeline
 
 | Step number | Actions | Optional | Suggested |
 |-------------|---------|----------|-----------|
 | 1 | check script dependencies | no | - |
-| 2 | check signed file hash given the metadata file | yes | yes |
+| 2 | check signed file integrity given the metadata file | yes | yes |
 | 3 | get certificates from the government's website and transform them in a readable format for OpenSSL | yes | yes |
 | 4 | check signature of signed file | yes | yes (step 3 is needed) |
 | 5 | extract the original file from the signed file | no | - |

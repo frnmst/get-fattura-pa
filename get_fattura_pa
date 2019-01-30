@@ -17,10 +17,10 @@ check_hash()
 {
     local metadata_file="${1}"
     local signed_file="${2}"
-    local ignore_hash_check="${3}"
+    local ignore_checksum_check="${3}"
     local metadata_file_xml_namespace="${4}"
 
-    [ "${ignore_hash_check}" = 'true' ] && return 0
+    [ "${ignore_checksum_check}" = 'true' ] && return 0
 
     # FIXME: should we get the file name?
     local original_hash="$(xmlstarlet sel \
@@ -79,7 +79,8 @@ check_signature()
 extract_file()
 {
     local signed_file="${1}"
-    local original_file="${2}"
+    # assume signed_file ends with .p7m
+    local original_file="${signed_file%%.p7m}"
 
     # -verify -noverify means to just extract the file without checking the
     # signature since this should have already been done in a previous step of
@@ -90,10 +91,10 @@ extract_file()
 extract_attachments()
 {
     local original_file="${1}"
-    local no_extract_attachment="${2}"
+    local no_extract_attachments="${2}"
     local original_file_xml_namespace="${3}"
 
-    [ "${no_extract_attachment}" = 'true' ] && return 0
+    [ "${no_extract_attachments}" = 'true' ] && return 0
 
     # Check that it is a valid XML file. We just need to exit if it's not an
     # XML file
@@ -113,12 +114,21 @@ extract_attachments()
         done
 }
 
-# . ./fbopt
-# Pipeline.
+chain()
+{
+    local metadata_file="${1}"
+    local signed_file="${2}"
+    local ignore_checksum_check="${3}"
+    local force_trusted_certificates_list_download="${4}"
+    local ignore_signature_check="${5}"
+    local no_extract_attachments="${6}"
 
-check_dependencies \
-    && check_hash "${metadata_file}" "${signed_file}" 'true' "${METADATA_FILE_XML_NAMESPACE}" \
-    && get_certificates "${TRUSTED_CERTIFICATES_LIST_URL}" 'ca.enc' 'ca.pem' 'false' "${TRUSTED_CERTIFICATES_LIST_ENCODED_FILE_XML_NAMESPACE}" \
-    && check_signature "${signed_file}" 'ca.pem' 'false' \
-    && extract_file "${signed_file}" 'out.xml' \
-    && extract_attachments 'out.xml' 'false' "${ORIGINAL_FILE_XML_NAMESPACE}"
+    check_dependencies \
+        && check_hash "${metadata_file}" "${signed_file}" "${ignore_checksum_check}" "${METADATA_FILE_XML_NAMESPACE}" \
+        && get_certificates "${TRUSTED_CERTIFICATES_LIST_URL}" 'ca.enc' 'ca.pem' "${force_trusted_certificates_list_download}" "${TRUSTED_CERTIFICATES_LIST_ENCODED_FILE_XML_NAMESPACE}" \
+        && check_signature "${signed_file}" 'ca.pem' "${ignore_signature_check}" \
+        && extract_file "${signed_file}" \
+        && extract_attachments 'out.xml' "${no_extract_attachments}" "${ORIGINAL_FILE_XML_NAMESPACE}"
+}
+
+. ./fbopt
