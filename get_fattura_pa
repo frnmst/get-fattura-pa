@@ -102,9 +102,11 @@ extract_file()
     local original_file="${signed_file%%.p7m}"
 
     # -verify -noverify means to just extract the file without checking the
-    # signature since this should have already been done in a previous step of
-    # the pipeline.
-    openssl smime -verify -noverify -in "${signed_file}" -inform DER -out "${original_file}"
+    # signer's certificate since this should have already been done in a
+    # previous step of the pipeline.
+    # Avoid also signature verification for the same reason.
+    openssl smime -nosigs -verify -noverify \
+        -in "${signed_file}" -inform DER -out "${original_file}"
 }
 
 extract_attachments()
