@@ -10,15 +10,15 @@ The purpose of this script is exclusively to read invoices received from the
 - [get_fattura_pa](#get_fattura_pa)
     - [Table of contents](#table-of-contents)
     - [Definitions](#definitions)
-    - [Help](#help)
     - [Examples](#examples)
+    - [Help](#help)
     - [Dependencies](#dependencies)
     - [Pipeline](#pipeline)
     - [Resources](#resources)
         - [Original script](#original-script)
         - [Fattura PA](#fattura-pa)
         - [PKCS # 7](#pkcs--7)
-    - [License](#license)
+    - [License and copyright](#license-and-copyright)
 
 [](TOC)
 
@@ -34,15 +34,45 @@ code.
 | original file | the invoice file without the signature |
 | attachments | user certain conditions, the files encoded as base64 binaries in the original file |
 
-## Help
-
-TODO
-
 ## Examples
 
     $ ./get_fattura_pa document.xml document.xml.p7m
 
-    TODO
+## Help
+
+```
+The purpose of this script is exclusively to read invoices received from the
+*Sistema di Interscambio*
+
+Mandatory arguments to long options are mandatory for short options too.
+Options:
+    -c, --ignore-checksum                   avoid checksum comparision between
+                                            the metadata file and the signed
+                                            file
+    -f, --force-certificates-download       update the certificate list even if
+                                            a certificate file is already
+                                            present
+    -h, --help                              print this help
+    -n, --no-extract-attachments            avoid extracting possible
+                                            attachments if the original
+                                            file is an XML file
+    --print-flags                           print the enabled options. This can also
+                                            be used to print the default options
+    -q, --quiet                             show errors and hide every other
+                                            output
+    -s, --ignore-signature                  avoid checking the cryptographic
+                                            signature of the file
+
+Exit status:
+ 0  if OK,
+ 1  if an error occurred.
+
+This  is  free  software: you are free to change and redistribute it.  There
+is NO WARRANTY, to the extent  permitted by law.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+Copyright © 2018 Enio Carboni - Italy    (see https://github.com/eniocarboni/p7m)
+            2019 Franco Masotti (frnmst) <franco.masotti@live.com>
+```
 
 ## Dependencies
 
@@ -105,4 +135,3 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with get_fattura_pa.  If not, see <https://www.gnu.org/licenses/>.
-
