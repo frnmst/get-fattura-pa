@@ -63,7 +63,7 @@ You need to install the following packages and the ones listed for
 |-------------|---------|----------|-----------|
 | 1 | check script dependencies | no | - |
 | 2 | check signed file integrity given the metadata file | yes | yes |
-| 3 | get certificates from the government's website and transform them in a readable format for OpenSSL | yes | yes |
+| 3 | get certificates from the government's website | yes | yes |
 | 4 | check signature of signed file | yes | yes (step 3 is needed) |
 | 5 | extract the original file from the signed file | no | - |
 | 6 | decode possible attachments from the original file | yes | yes |
