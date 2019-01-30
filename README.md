@@ -9,6 +9,7 @@ The purpose of this script is exclusively to read invoices received from the
 
 - [get-fattura-pa](#get-fattura-pa)
     - [Table of contents](#table-of-contents)
+    - [Version](#version)
     - [Definitions](#definitions)
     - [Examples](#examples)
     - [Help](#help)
