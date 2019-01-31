@@ -28,6 +28,8 @@ Options:
     -c, --ignore-checksum                   avoid checksum comparision between
                                             the metadata file and the signed
                                             file
+    -e, --ignore-certificate                avoid checking the certificate
+                                            used by the signer
     -f, --force-certificates-download       update the certificate list even if
                                             a certificate file is already
                                             present
@@ -81,12 +83,13 @@ main()
     declare -a argc=("${!1}")
 
     # Set the options. flag_f has an optional argument.
-    local getopt_short_options='cfhnqs'
-    local getopt_long_options='ignore-checksum,force-certificates-download,\
+    local getopt_short_options='cefhnqs'
+    local getopt_long_options='ignore-checksum,ignore-certificate,force-certificates-download,\
 no-extract-attachments,print-flags,help,quiet,ignore-signature'
 
     # Set the default values for the flags.
     local ignore_checksum='false'
+    local ignore_certificate='false'
     local force_certificates_download='false'
     local no_extract_attachments='false'
     local quiet='false'
@@ -112,6 +115,8 @@ no-extract-attachments,print-flags,help,quiet,ignore-signature'
         case "${1}" in
 
             -c | --ignore-checksum )                ignore_checksum='true' ;;
+
+            -e | --ignore-certificate )             ignore_certificate='true' ;;
 
             -f | --force-certificates-download )    force_certificates_download='true' ;;
 
@@ -151,6 +156,7 @@ no-extract-attachments,print-flags,help,quiet,ignore-signature'
     [ "${print_flags}" = 'true' ] \
         && show_flags \
            'ignore_checksum' \
+           'ignore_certificate' \
            'force_certificates_download' \
            'no_extract_attachments' \
            'quiet' \
@@ -162,7 +168,7 @@ no-extract-attachments,print-flags,help,quiet,ignore-signature'
 
     # From now on you should call a function or an external program
     # using the values of the flag variables.
-    chain "${metadata_file}" "${signed_file}" "${ignore_checksum}" \
+    chain "${metadata_file}" "${signed_file}" "${ignore_checksum}" "${ignore_certificate}" \
         "${force_certificates_download}" "${ignore_signature}" \
         "${no_extract_attachments}"
 }

@@ -83,15 +83,20 @@ get_certificates()
     fi
 }
 
-check_signature()
+check_signature_and_signers_certificate()
 {
     local signed_file="${1}"
     local trusted_certificates_list_decoded_file="${2}"
     local ignore_signature_check="${3}"
+    local ignore_signers_certificate="${4}"
+    local nosigs=''
+    local noverify=''
 
-    [ "${ignore_signature_check}" = 'true' ] && return 0
+    [ "${ignore_signature_check}" = 'true' ] && nosigs='-nosigs'
+    [ "${ignore_signers_certificate}" = 'true' ] && noverify='-noverify'
 
-    openssl smime -verify -CAfile "${trusted_certificates_list_decoded_file}" \
+    openssl smime "${nosigs}" -verify "${noverify}" \
+        -CAfile "${trusted_certificates_list_decoded_file}" \
         -in "${signed_file}" -inform DER -out /dev/null
 }
 
@@ -140,14 +145,15 @@ chain()
     local metadata_file="${1}"
     local signed_file="${2}"
     local ignore_checksum_check="${3}"
-    local force_trusted_certificates_list_download="${4}"
-    local ignore_signature_check="${5}"
-    local no_extract_attachments="${6}"
+    local ignore_signers_certificate="${4}"
+    local force_trusted_certificates_list_download="${5}"
+    local ignore_signature_check="${6}"
+    local no_extract_attachments="${7}"
 
     check_dependencies \
         && check_hash "${metadata_file}" "${signed_file}" "${ignore_checksum_check}" "${METADATA_FILE_XML_NAMESPACE}" \
         && get_certificates "${TRUSTED_CERTIFICATES_LIST_URL}" 'ca.enc' 'ca.pem' "${force_trusted_certificates_list_download}" "${TRUSTED_CERTIFICATES_LIST_ENCODED_FILE_XML_NAMESPACE}" \
-        && check_signature "${signed_file}" 'ca.pem' "${ignore_signature_check}" \
+        && check_signature_and_signers_certificate "${signed_file}" 'ca.pem' "${ignore_signature_check}" "${ignore_signers_certificate}" \
         && extract_file "${signed_file}" \
         && extract_attachments "${signed_file%%.p7m}" "${no_extract_attachments}" "${ORIGINAL_FILE_XML_NAMESPACE}"
 }
