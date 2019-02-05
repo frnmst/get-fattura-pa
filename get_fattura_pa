@@ -24,7 +24,7 @@
 
 check_dependencies()
 {
-    which \
+    command -V \
         xmlstarlet \
         gawk \
         sha256sum \
@@ -33,16 +33,34 @@ check_dependencies()
         base64
 }
 
+check_files()
+{
+    local metadata_file="${1}"; assert_isinstance "${metadata_file}" str
+    local signed_file="${2}"; assert_isinstance "${signed_file}" str
+    local ignore_checksum_check="${3}"; assert_isinstance \
+        "${ignore_checksum_check}" bool
+
+    { [ -f "${signed_file}" ] \
+        && openssl pkcs7 -print_certs -text -noout -inform DER \
+        -in "${signed_file}"; } || return 1
+    { [ "${ignore_checksum_check}" = 'false' ] && [ -f "${metadata_file}" ] \
+        && xmlstarlet val "${metadata_file}"; } || return 1
+}
+
 check_hash()
 {
-    local metadata_file="${1}"
-    local signed_file="${2}"
-    local ignore_checksum_check="${3}"
-    local metadata_file_xml_namespace="${4}"
+    local metadata_file="${1}"; assert_isinstance "${metadata_file}" str
+    local signed_file="${2}"; assert_isinstance "${signed_file}" str
+    local ignore_checksum_check="${3}"; assert_isinstance \
+        "${ignore_checksum_check}" bool
+    local metadata_file_xml_namespace="${4}"; assert_isinstance \
+        "${metadata_file_xml_namespace}" str
+    # Assume metadata_file is a valid XML file.
 
     [ "${ignore_checksum_check}" = 'true' ] && return 0
 
-    # FIXME: should we get the file name?
+    # TODO: assert original file name == name reported on the metadata file.
+
     local original_hash="$(xmlstarlet sel \
         -N x="${metadata_file_xml_namespace}" \
         --template --match '//x:FileMetadati/Hash' \
@@ -55,11 +73,16 @@ check_hash()
 
 get_certificates()
 {
-    local trusted_certificates_list_url="${1}"
-    local trusted_certificates_list_encoded_file="${2}"
-    local trusted_certificates_list_decoded_file="${3}"
-    local force_trusted_certificates_list_download="${4}"
-    local trusted_certificates_list_encoded_file_xml_namespace="${5}"
+    local trusted_certificates_list_url="${1}"; assert_isinstance \
+        "${trusted_certificates_list_url}" str
+    local trusted_certificates_list_encoded_file="${2}"; assert_isinstance \
+        "${trusted_certificates_list_encoded_file}" str
+    local trusted_certificates_list_decoded_file="${3}"; assert_isinstance \
+        "${trusted_certificates_list_decoded_file}" str
+    local force_trusted_certificates_list_download="${4}"; assert_isinstance \
+        "${force_trusted_certificates_list_download}" bool
+    local trusted_certificates_list_encoded_file_xml_namespace="${5}"; assert_isinstance \
+        "${trusted_certificates_list_encoded_file_xml_namespace}" str
 
     if [ "${force_trusted_certificates_list_download}" = 'true' ] \
         || { [ ! -f "${trusted_certificates_list_encoded_file}" ] \
@@ -85,10 +108,13 @@ get_certificates()
 
 check_signature_and_signers_certificate()
 {
-    local signed_file="${1}"
-    local trusted_certificates_list_decoded_file="${2}"
-    local ignore_signature_check="${3}"
-    local ignore_signers_certificate="${4}"
+    local signed_file="${1}"; assert_isinstance "${signed_file}" str
+    local trusted_certificates_list_decoded_file="${2}"; assert_isinstance \
+        "${trusted_certificates_list_decoded_file}" str
+    local ignore_signature_check="${3}"; assert_isinstance \
+        "${ignore_signature_check}" bool
+    local ignore_signers_certificate="${4}"; assert_isinstance \
+        "${ignore_signers_certificate}" bool
     local nosigs=''
     local noverify=''
 
@@ -102,23 +128,26 @@ check_signature_and_signers_certificate()
 
 extract_file()
 {
-    local signed_file="${1}"
+    local signed_file="${1}"; assert_isinstance "${signed_file}" str
     # Assume signed_file ends with .p7m. FIXME (see chain function as well).
-    local original_file="${signed_file%%.p7m}"
+    local original_file="${signed_file%%.p7m}"; assert_isinstance \
+        "${original_file}" str
 
     # -verify -noverify means to just extract the file without checking the
     # signer's certificate since this should have already been done in a
     # previous step of the pipeline.
-    # Avoid also signature verification for the same reason.
+    # Avoid also signature verification (-nosigs) for the same reason.
     openssl smime -nosigs -verify -noverify \
         -in "${signed_file}" -inform DER -out "${original_file}"
 }
 
 extract_attachments()
 {
-    local original_file="${1}"
-    local no_extract_attachments="${2}"
-    local original_file_xml_namespace="${3}"
+    local original_file="${1}"; assert_isinstance "${original_file}" str
+    local no_extract_attachments="${2}"; assert_isinstance \
+        "${no_extract_attachments}" bool
+    local original_file_xml_namespace="${3}"; assert_isinstance \
+        "${original_file_xml_namespace}" str
 
     [ "${no_extract_attachments}" = 'true' ] && return 0
 
@@ -140,7 +169,7 @@ extract_attachments()
         done
 }
 
-chain()
+pipeline()
 {
     local metadata_file="${1}"
     local signed_file="${2}"
@@ -151,6 +180,7 @@ chain()
     local no_extract_attachments="${7}"
 
     check_dependencies \
+        && check_files "${metadata_file}" "${signed_file}" "${ignore_checksum_check}" \
         && check_hash "${metadata_file}" "${signed_file}" "${ignore_checksum_check}" "${METADATA_FILE_XML_NAMESPACE}" \
         && get_certificates "${TRUSTED_CERTIFICATES_LIST_URL}" 'ca.enc' 'ca.pem' "${force_trusted_certificates_list_download}" "${TRUSTED_CERTIFICATES_LIST_ENCODED_FILE_XML_NAMESPACE}" \
         && check_signature_and_signers_certificate "${signed_file}" 'ca.pem' "${ignore_signature_check}" "${ignore_signers_certificate}" \
@@ -158,4 +188,5 @@ chain()
         && extract_attachments "${signed_file%%.p7m}" "${no_extract_attachments}" "${ORIGINAL_FILE_XML_NAMESPACE}"
 }
 
+. ./fbla
 . ./fbopt

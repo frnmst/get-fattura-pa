@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
-# fbopt version 0.4.2
+# fbopt version 0.4.3
 #
 # Written in 2018 by Franco Masotti/frnmst <franco.masotti@live.com>
 #
@@ -15,6 +15,8 @@
 #
 # See also https://frnmst.gitlab.io/notes/my-bash-option-parsing-template.html
 #
+
+set -euo pipefail
 
 show_help()
 {
@@ -70,7 +72,7 @@ show_flags()
 
 getopt_error()
 {
-    local program_name="${0}"
+    local program_name="${0}";
 
     printf "%s\n" "Try '"${program_name}" --help' for more information"
 } 1>&2 2>&-
@@ -80,12 +82,18 @@ main()
     # Create a new array from the reference of the input one.
     # See https://stackoverflow.com/questions/1063347/passing-arrays-as-parameters-in-bash
     # See some comments below.
+    set +u
     declare -a argc=("${!1}")
+    set -u
 
     # Set the options. flag_f has an optional argument.
     local getopt_short_options='cefhnqs'
     local getopt_long_options='ignore-checksum,ignore-certificate,force-certificates-download,\
 no-extract-attachments,print-flags,help,quiet,ignore-signature'
+
+    # Set the default values for the static flags.
+    local help='false'
+    local print_flags='false'
 
     # Set the default values for the flags.
     local ignore_checksum='false'
@@ -138,10 +146,12 @@ no-extract-attachments,print-flags,help,quiet,ignore-signature'
     shift 1
     # Everything else after '--' is an argument.
     argc="${*}"
-
-    # Arguments must be placed here as local variables
+    # Arguments must be placed here as local variables.
+    # We know that these arguments will be defined.
+    set +u
     local metadata_file="${1}"
     local signed_file="${2}"
+    set -u
 
     [ "${help}" = 'true' ] && show_help && return 0
     # Check that the flags or arguments that must be non empty are actually not
@@ -168,14 +178,21 @@ no-extract-attachments,print-flags,help,quiet,ignore-signature'
 
     # From now on you should call a function or an external program
     # using the values of the flag variables.
-    chain "${metadata_file}" "${signed_file}" "${ignore_checksum}" "${ignore_certificate}" \
-        "${force_certificates_download}" "${ignore_signature}" \
+    pipeline \
+        "${metadata_file}" \
+        "${signed_file}" \
+        "${ignore_checksum}" \
+        "${ignore_certificate}" \
+        "${force_certificates_download}" \
+        "${ignore_signature}" \
         "${no_extract_attachments}"
 }
 
 # Test dependencies and versions.
 # getopt must return 4 to be fully compatible. See getopt's manual.
-which bash getopt 1>/dev/null 2>/dev/null && { getopt -T; [ ${?} -eq 4 ]; }
+set +e
+command -V bash getopt 1>/dev/null 2>/dev/null && { getopt -T; [ ${?} -eq 4 ]; }
+set -e
 
 # Get and pass argc to the main function.
 # All this work with an array must be done to preserve

@@ -1,0 +1,5 @@
+ca.enc
+ca.pem
+*.pdf
+*.xml
+*.xml.p7m

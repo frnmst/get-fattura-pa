@@ -83,7 +83,8 @@ Copyright © 2018 Enio Carboni - Italy    (see https://github.com/eniocarboni/p7
 ## Dependencies
 
 You need to install the following packages and the ones listed for 
-[fbopt](https://github.com/frnmst/fbopt#dependencies)
+[fbopt](https://github.com/frnmst/fbopt#dependencies) and 
+[fbla](https://github.com/frnmst/fbla#dependencies)
 
 | Package | Executable | Version command | Package version |
 |---------|------------|-----------------|-----------------|
@@ -98,11 +99,12 @@ You need to install the following packages and the ones listed for
 | Step number | Actions | Optional | Suggested | Depends on step number |
 |-------------|---------|----------|-----------|------------------------|
 | 1 | check script dependencies | no | - | - |
-| 2 | check signed file integrity given the metadata file | yes | yes | - |
-| 3 | get certificates from the government's website | yes | yes | - |
-| 4 | check signature and signer's certificate of the signed file | yes | yes | 3 |
-| 5 | extract the original file from the signed file | no | - | - |
-| 6 | decode possible attachments from the original file | yes | yes | 5 |
+| 2 | check input files | no | - | - |
+| 3 | check signed file integrity given the metadata file | yes | yes | - |
+| 4 | get certificates from the government's website | yes | yes | - |
+| 5 | check signature and signer's certificate of the signed file | yes | yes | 4 |
+| 6 | extract the original file from the signed file | no | - | - |
+| 7 | decode possible attachments from the original file | yes | yes | 6 |
 
 ## Resources
 

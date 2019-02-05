@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+#
+# fbla version 0.0.1
+#
+# Written in 2019 by Franco Masotti/frnmst <franco.masotti@live.com>
+#
+# To the extent possible under law, the author(s) have dedicated all 
+# copyright and related and neighboring rights to this software to the public 
+# domain worldwide. This software is distributed without any warranty.
+#
+# You should have received a copy of the CC0 Public Domain Dedication along 
+# with this software. If not, see 
+# <http://creativecommons.org/publicdomain/zero/1.0/>. 
+#
+
+set -euo pipefail
+
+assert_isinstance()
+{
+    # prototype: assert_isinstance(value,type)
+    # input:
+    #   value = <any value>
+    #   type  = 'bool','int','str'
+    # output:
+    #   return 0    if true
+    #   return 1    if false
+    local value="${1}"
+    local type="${2}"
+
+    # Safety first.
+    if [ -z "${type}" ]; then
+        return 1
+    fi
+
+    if [[ "${value}" =~ [[:alpha:]] ]]; then
+        if [ "${type}" = 'bool' ]; then
+            if [ "${value}" = 'true' ] || [ "${value}" = 'false' ]; then
+                return 0
+            fi
+        elif [ "${type}" = 'str' ]; then
+            return 0
+        fi
+    # See:
+    # https://stackoverflow.com/questions/806906/how-do-i-test-if-a-variable-is-a-number-in-bash
+    elif [[ "${value}" =~ ^[0-9]+$ ]]; then
+        if [ "${type}" = 'int' ] || [ "${type}" = 'str' ]; then
+            return 0
+        fi
+    elif [[ "${value}" =~ [[:alnum:]] ]]; then
+        if [ "${type}" = 'str' ]; then
+            return 0
+        fi
+    elif [ -z "${value}" ]; then
+        if [ "${type}" = 'str' ]; then
+            return 0
+        fi
+    fi
+
+    return 1
+}
