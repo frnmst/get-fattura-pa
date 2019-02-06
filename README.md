@@ -34,7 +34,7 @@ code.
 
 | Term | Meaning |
 |------|---------|
-| signed file | the invoice file signed with a PKKCS # 7 public key |
+| signed file | the invoice file signed with a PKCS # 7 public key |
 | metadata file | a file that contains the checksum of the signed file as well as other information |
 | original file | the invoice file without the signature |
 | attachments | user certain conditions, the files encoded as base64 binaries in the original file |
