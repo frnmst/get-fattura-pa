@@ -97,7 +97,7 @@ Copyright © 2018 Enio Carboni - Italy    (see https://github.com/eniocarboni/p7
 
 You need to install the following packages and the ones listed for 
 [fbopt](https://github.com/frnmst/fbopt#dependencies) and 
-[fbla](https://github.com/frnmst/fbla#dependencies)
+[fbla](https://github.com/frnmst/fbla#dependencies):
 
 | Package | Executable | Version command | Package version |
 |---------|------------|-----------------|-----------------|
@@ -109,6 +109,9 @@ You need to install the following packages and the ones listed for
 
 ## Pipeline
 
+If there is a failure in any point of this pipeline the program stops and 
+returns an error code.
+
 | Step number | Actions | Optional | Suggested | Depends on step number |
 |-------------|---------|----------|-----------|------------------------|
 | 1 | check script dependencies | no | - | - |
@@ -118,9 +121,6 @@ You need to install the following packages and the ones listed for
 | 5 | check signature and signer's certificate of the signed file | yes | yes | 4 |
 | 6 | extract the original file from the signed file | no | - | - |
 | 7 | decode possible attachments from the original file | yes | yes | 6 |
-
-If there is a failure in any point of the pipeline the program stops and 
-returns an error code.
 
 ## Resources
 
