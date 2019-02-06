@@ -91,7 +91,6 @@ get_certificates()
             --output "${trusted_certificates_list_encoded_file}" \
             "${trusted_certificates_list_url}"
 
-        # Check that it is a valid XML file.
         xmlstarlet val "${trusted_certificates_list_encoded_file}" || return 1
 
         xmlstarlet sel -N x="${trusted_certificates_list_encoded_file_xml_namespace}" \
@@ -161,14 +160,14 @@ extract_attachments()
 
     [ "${no_extract_attachments}" = 'true' ] && return 0
 
-    # Check that it is a valid XML file. We just need to exit if it's not an
-    # XML file.
+    # We just need to exit if it's not a validated XML file.
     xmlstarlet val "${original_file}" || return 0
 
     # This is a loop for all the attachments.
-    # We will use the attachment_name as the output file name.
+    # We will use the nome_attachment as the output file name.
     # We need to remove newline characters between each line of the Attachment
-    # field. See https://stackoverflow.com/questions/14952640/xmlstarlet-removing-linefeed
+    # field. See:
+    # https://stackoverflow.com/questions/14952640/xmlstarlet-removing-linefeed
     xmlstarlet sel --noblanks -N x="${original_file_xml_namespace}" \
         --template --match "//x:FatturaElettronica/FatturaElettronicaBody/Allegati" \
         --value-of "NomeAttachment" -o ' ' \
