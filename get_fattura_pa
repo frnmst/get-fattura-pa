@@ -191,8 +191,8 @@ pipeline()
     check_dependencies \
         && check_files "${metadata_file}" "${signed_file}" "${ignore_checksum_check}" \
         && check_hash "${metadata_file}" "${signed_file}" "${ignore_checksum_check}" "${METADATA_FILE_XML_NAMESPACE}" \
-        && get_certificates "${TRUSTED_CERTIFICATES_LIST_URL}" 'ca.enc' 'ca.pem' "${force_trusted_certificates_list_download}" "${TRUSTED_CERTIFICATES_LIST_ENCODED_FILE_XML_NAMESPACE}" \
-        && check_signature_and_signers_certificate "${signed_file}" 'ca.pem' "${ignore_signature_check}" "${ignore_signers_certificate}" \
+        && get_certificates "${TRUSTED_CERTIFICATES_LIST_URL}" "${TRUSTED_CERTIFICATES_LIST_ENCODED_FILE}" "${TRUSTED_CERTIFICATES_LIST_DECODED_FILE}" "${force_trusted_certificates_list_download}" "${TRUSTED_CERTIFICATES_LIST_ENCODED_FILE_XML_NAMESPACE}" \
+        && check_signature_and_signers_certificate "${signed_file}" "${TRUSTED_CERTIFICATES_LIST_DECODED_FILE}" "${ignore_signature_check}" "${ignore_signers_certificate}" \
         && extract_file "${signed_file}" \
         && extract_attachments "${signed_file%%.p7m}" "${no_extract_attachments}" "${ORIGINAL_FILE_XML_NAMESPACE}"
 }
