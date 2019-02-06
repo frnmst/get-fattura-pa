@@ -27,6 +27,8 @@ The purpose of this script is exclusively to read invoices received from the
 
 1.0.0
 
+See all [get-fattura-pa releases](https://github.com/frnmst/get-fattura-pa/releases).
+
 ## Definitions
 
 The following terms are used throughout this document and within the source 
