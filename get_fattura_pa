@@ -21,7 +21,7 @@
 # along with get-fattura-pa.  If not, see <https://www.gnu.org/licenses/>.
 
 . ./get_fattura_pa.conf
-
+set -x
 check_dependencies()
 {
     command -V \
@@ -87,7 +87,7 @@ get_certificates()
     if [ "${force_trusted_certificates_list_download}" = 'true' ] \
         || { [ ! -f "${trusted_certificates_list_encoded_file}" ] \
              && [ ! -f "${trusted_certificates_list_decoded_file}" ]; }; then
-        curl --progress-bar --verbose --retry 2 \
+        curl --progress-bar --retry 2 \
             --output "${trusted_certificates_list_encoded_file}" \
             "${trusted_certificates_list_url}"
 
@@ -115,15 +115,25 @@ check_signature_and_signers_certificate()
         "${ignore_signature_check}" bool
     local ignore_signers_certificate="${4}"; assert_isinstance \
         "${ignore_signers_certificate}" bool
-    local nosigs=''
-    local noverify=''
 
-    [ "${ignore_signature_check}" = 'true' ] && nosigs='-nosigs'
-    [ "${ignore_signers_certificate}" = 'true' ] && noverify='-noverify'
-
-    openssl smime "${nosigs}" -verify "${noverify}" \
-        -CAfile "${trusted_certificates_list_decoded_file}" \
-        -in "${signed_file}" -inform DER -out /dev/null
+    if [ "${ignore_signature_check}" = 'true' ] \
+        && [ "${ignore_signers_certificate}" = 'true' ]; then
+        return 0
+    elif [ "${ignore_signature_check}" = 'false' ] \
+        && [ "${ignore_signers_certificate}" = 'true' ]; then
+        openssl smime -verify -noverify \
+            -CAfile "${trusted_certificates_list_decoded_file}" \
+            -in "${signed_file}" -inform DER -out /dev/null
+    elif [ "${ignore_signature_check}" = 'true' ] \
+        && [ "${ignore_signers_certificate}" = 'false' ]; then
+        openssl smime -nosigs -verify \
+            -CAfile "${trusted_certificates_list_decoded_file}" \
+            -in "${signed_file}" -inform DER -out /dev/null
+    else
+        openssl smime -verify \
+            -CAfile "${trusted_certificates_list_decoded_file}" \
+            -in "${signed_file}" -inform DER -out /dev/null
+    fi
 }
 
 extract_file()
