@@ -21,7 +21,7 @@
 # along with get-fattura-pa.  If not, see <https://www.gnu.org/licenses/>.
 
 . ./get_fattura_pa.conf
-set -x
+
 check_dependencies()
 {
     command -V \
@@ -43,8 +43,9 @@ check_files()
     { [ -f "${signed_file}" ] \
         && openssl pkcs7 -print_certs -text -noout -inform DER \
         -in "${signed_file}"; } || return 1
-    { [ "${ignore_checksum_check}" = 'false' ] && [ -f "${metadata_file}" ] \
-        && xmlstarlet val "${metadata_file}"; } || return 1
+    [ "${ignore_checksum_check}" = 'true' ] && return 0
+    { [ -f "${metadata_file}" ] && xmlstarlet val "${metadata_file}"; } \
+        || return 1
 }
 
 check_hash()

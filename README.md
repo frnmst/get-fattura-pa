@@ -25,7 +25,7 @@ The purpose of this script is exclusively to read invoices received from the
 
 ## Version
 
-0.0.1
+1.0.0
 
 ## Definitions
 
@@ -34,14 +34,25 @@ code.
 
 | Term | Meaning |
 |------|---------|
-| signed file | the invoice file signed with a PKCS # 7 public key |
+| checksum | a file integrity check |
+| signed file | the invoice file signed using a PKCS # 7 system |
+| certificate | proves that the public key used for the signature is authentic |
 | metadata file | a file that contains the checksum of the signed file as well as other information |
 | original file | the invoice file without the signature |
 | attachments | user certain conditions, the files encoded as base64 binaries in the original file |
 
 ## Examples
 
-    $ ./get_fattura_pa document.xml document.xml.p7m
+- Given a metadata file called `document.xml` and a signed file called 
+  `document.xml.p7m`, you can verify and extract the original file
+  and attachments with the following command:
+
+      $ ./get_fattura_pa document.xml document.xml.p7m
+
+- If you are not in possession of the metadata file or there is a problem with 
+  it, you may also skip the checksum:
+
+      $ ./get_fattura_pa --ignore-checksum /dev/null document.xml.p7m
 
 ## Help
 
@@ -55,6 +66,8 @@ Options:
     -c, --ignore-checksum                   avoid checksum comparision between
                                             the metadata file and the signed
                                             file
+    -e, --ignore-certificate                avoid checking the certificate
+                                            used by the signer
     -f, --force-certificates-download       update the certificate list even if
                                             a certificate file is already
                                             present
@@ -100,11 +113,14 @@ You need to install the following packages and the ones listed for
 |-------------|---------|----------|-----------|------------------------|
 | 1 | check script dependencies | no | - | - |
 | 2 | check input files | no | - | - |
-| 3 | check signed file integrity given the metadata file | yes | yes | - |
+| 3 | check signed file integrity given the metadata file (checksum) | yes | yes | - |
 | 4 | get certificates from the government's website | yes | yes | - |
 | 5 | check signature and signer's certificate of the signed file | yes | yes | 4 |
 | 6 | extract the original file from the signed file | no | - | - |
 | 7 | decode possible attachments from the original file | yes | yes | 6 |
+
+If there is a failure in any point of the pipeline the program stops and 
+returns an error code.
 
 ## Resources
 
