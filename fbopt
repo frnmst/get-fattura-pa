@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# fbopt version 0.4.3
+# fbopt version 0.4.5
 #
 # Written in 2018 by Franco Masotti/frnmst <franco.masotti@live.com>
 #
@@ -45,6 +45,7 @@ Options:
                                             output
     -s, --ignore-signature                  avoid checking the cryptographic
                                             signature of the file
+    --version                               print software version
 
 Exit status:
  0  if OK,
@@ -70,6 +71,14 @@ show_flags()
     done
 }
 
+show_version()
+{
+    local program_name="${1}"
+    local version="${2}"
+
+    printf "%s\n" ""${program_name}" "${version}""
+}
+
 getopt_error()
 {
     local program_name="${0}";
@@ -89,11 +98,16 @@ main()
     # Set the options. flag_f has an optional argument.
     local getopt_short_options='cefhnqs'
     local getopt_long_options='ignore-checksum,ignore-certificate,force-certificates-download,\
-no-extract-attachments,print-flags,help,quiet,ignore-signature'
+no-extract-attachments,print-flags,help,quiet,ignore-signature,version'
 
     # Set the default values for the static flags.
     local help='false'
     local print_flags='false'
+    local version='false'
+    # Remember to set the following variables accordingly and to update the
+    # version number.
+    local program_version='1.0.1'
+    local program_name_simplified='get_fattura_pa'
 
     # Set the default values for the flags.
     local ignore_checksum='false'
@@ -138,6 +152,8 @@ no-extract-attachments,print-flags,help,quiet,ignore-signature'
 
             --print-flags )                         print_flags='true' ;;
 
+            --version )                             version='true' ;;
+
         esac
         # Iterate through all arguments.
         shift 1
@@ -154,6 +170,9 @@ no-extract-attachments,print-flags,help,quiet,ignore-signature'
     set -u
 
     [ "${help}" = 'true' ] && show_help && return 0
+    [ "${version}" = 'true' ] \
+        && show_version "${program_name_simplified}" "${program_version}" \
+        && return 0
     # Check that the flags or arguments that must be non empty are actually not
     # empty.
     # A user might infact circumvent getopt's mechanisms like this
@@ -198,8 +217,19 @@ set -e
 # All this work with an array must be done to preserve
 # quotations for arguments that have whitespaces.
 # See https://lists.debian.org/debian-user/2007/12/msg01244.html
-declare -a opts=()
+opts=('')
 for opt in "${@}"; do
     opts=("${opts[@]}" "${opt}")
 done
+
+if [ -z "${opts[0]}" ] && [ ${#opts[@]} -gt 1 ]; then
+        # Shift one element left in the opts array.
+        i=0
+        while [ ${i} -lt $((${#opts[@]}-1)) ]; do
+                opts[${i}]=${opts[$((${i}+1))]}
+                i=$((${i}+1))
+        done
+        unset i
+fi
+
 main 'opts[@]'
