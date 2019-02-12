@@ -24,13 +24,12 @@
 
 check_dependencies()
 {
-    command -V \
-        xmlstarlet \
-        gawk \
-        sha256sum \
-        curl \
-        openssl \
-        base64
+    command -V xmlstarlet \
+        && command -V gawk \
+        && command -V sha256sum \
+        && command -V curl \
+        && command -V openssl \
+        && command -V base64
 }
 
 check_files()

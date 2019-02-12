@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# fbopt version 0.4.5
+# fbopt version 0.4.6
 #
 # Written in 2018 by Franco Masotti/frnmst <franco.masotti@live.com>
 #
@@ -210,7 +210,8 @@ no-extract-attachments,print-flags,help,quiet,ignore-signature,version'
 # Test dependencies and versions.
 # getopt must return 4 to be fully compatible. See getopt's manual.
 set +e
-command -V bash getopt 1>/dev/null 2>/dev/null && { getopt -T; [ ${?} -eq 4 ]; }
+command -V bash && command -V getopt 1>/dev/null 2>/dev/null \
+    && { getopt -T; [ ${?} -eq 4 ]; }
 set -e
 
 # Get and pass argc to the main function.

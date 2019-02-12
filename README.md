@@ -107,7 +107,7 @@ You need to install the following packages and the ones listed for
 | [XMLStarlet](http://xmlstar.sourceforge.net/) | `/bin/xmlstarlet` |  `$ xmlstarlet --version` | `1.6.1 compiled against libxml2 2.9.8, linked with 20909 compiled against libxslt 1.1.32, linked with 10133-GITv1.1.33` |
 | [GNU Awk](http://www.gnu.org/software/gawk/) | `/bin/gawk` | `$ gawk --version` |`GNU Awk 4.2.1, API: 2.0 (GNU MPFR 4.0.1, GNU MP 6.1.2)` |
 | [curl](https://curl.haxx.se) | `/bin/curl` | `$ curl --version` | `curl 7.63.0 (x86_64-pc-linux-gnu) libcurl/7.63.0 OpenSSL/1.1.1a zlib/1.2.11 libidn2/2.1.0 libpsl/0.20.2 (+libidn2/2.1.0) libssh2/1.8.0 nghttp2/1.35.1 Release-Date: 2018-12-12` |
-| [OpenSSL](https://www.openssl.org) | `/bin/openssl` | `$ openssl version` | `OpenSSL 1.1.1a  20 Nov 2018` |
+| [OpenSSL](https://www.openssl.org) | `/bin/openssl` | `$ openssl version` | `OpenSSL 1.1.1a  20 Nov 2018` or `OpenSSL 1.0.2g  1 Mar 2016` |
 
 ## Pipeline
 
@@ -123,6 +123,12 @@ returns an error code.
 | 5 | check signature and signer's certificate of the signed file | yes | yes | 4 |
 | 6 | extract the original file from the signed file | no | - | - |
 | 7 | decode possible attachments from the original file | yes | yes | 6 |
+
+## Bugs
+
+- There seems to be some issue in step number 4, specifically in the signature 
+  verification phase. Using OpenSSL version `1.1.1a  20 Nov 2018` 
+  sometimes fails while OpenSSL version `1.0.2g  1 Mar 2016` does not.
 
 ## Resources
 

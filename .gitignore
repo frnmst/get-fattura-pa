@@ -1,6 +1,8 @@
-ca.enc
+ca.enc.xml
 ca.pem
 *.pdf
 *.PDF
 *.xml
+*.XML
 *.xml.p7m
+*.XML.P7M
