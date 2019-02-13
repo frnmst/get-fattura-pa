@@ -14,7 +14,11 @@ The purpose of this script is exclusively to read invoices received from the
     - [Examples](#examples)
     - [Help](#help)
     - [Dependencies](#dependencies)
+    - [Installation](#installation)
+        - [Arch Linux based distros](#arch-linux-based-distros)
+        - [Debian based distros](#debian-based-distros)
     - [Pipeline](#pipeline)
+    - [Bugs](#bugs)
     - [Resources](#resources)
         - [Original script](#original-script)
         - [Fattura PA](#fattura-pa)
@@ -25,7 +29,7 @@ The purpose of this script is exclusively to read invoices received from the
 
 ## Version
 
-1.0.0
+1.0.1
 
 See all [get-fattura-pa releases](https://github.com/frnmst/get-fattura-pa/releases).
 
@@ -109,6 +113,16 @@ You need to install the following packages and the ones listed for
 | [curl](https://curl.haxx.se) | `/bin/curl` | `$ curl --version` | `curl 7.63.0 (x86_64-pc-linux-gnu) libcurl/7.63.0 OpenSSL/1.1.1a zlib/1.2.11 libidn2/2.1.0 libpsl/0.20.2 (+libidn2/2.1.0) libssh2/1.8.0 nghttp2/1.35.1 Release-Date: 2018-12-12` |
 | [OpenSSL](https://www.openssl.org) | `/bin/openssl` | `$ openssl version` | `OpenSSL 1.1.1a  20 Nov 2018` or `OpenSSL 1.0.2g  1 Mar 2016` |
 
+## Installation
+
+### Arch Linux based distros
+
+    # pacman -S coreutils xmlstarlet gawk curl openssl
+
+### Debian based distros
+
+    # apt-get install coreutils xmlstarlet gawk curl openssl 
+
 ## Pipeline
 
 If there is a failure in any point of this pipeline the program stops and 
@@ -126,7 +140,7 @@ returns an error code.
 
 ## Bugs
 
-- There seems to be some issue in step number 4, specifically in the signature 
+- There seems to be some issue in step number 5, specifically in the signature 
   verification phase. Using OpenSSL version `1.1.1a  20 Nov 2018` 
   sometimes fails while OpenSSL version `1.0.2g  1 Mar 2016` does not.
 

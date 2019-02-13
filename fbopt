@@ -210,7 +210,8 @@ no-extract-attachments,print-flags,help,quiet,ignore-signature,version'
 # Test dependencies and versions.
 # getopt must return 4 to be fully compatible. See getopt's manual.
 set +e
-command -V bash && command -V getopt 1>/dev/null 2>/dev/null \
+command -V bash 1>/dev/null \
+    && command -V getopt 1>/dev/null \
     && { getopt -T; [ ${?} -eq 4 ]; }
 set -e
 
