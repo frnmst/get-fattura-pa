@@ -3,6 +3,9 @@
 The purpose of this script is exclusively to read invoices received from the
 *Sistema di Interscambio*.
 
+**Warning: THIS REPOSITORY IS DEPRECATED. HAVE A LOOK AT https://github.com/frnmst/fattura-elettronica-reader
+FOR THE DEVELOPMENT.**
+
 ## Table of contents
 
 [](TOC)
